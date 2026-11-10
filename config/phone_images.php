@@ -9,7 +9,7 @@
 */
 
 $apple = 'https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/';
-$store = fn (string $name) => "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/{$name}?wid=1000&hei=1000&fmt=png-alpha";
+$store = fn (string $name) => "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/{$name}?wid=800&hei=800&fmt=png-alpha";
 
 $hero = [
     'iphone-18-pro-max' => $apple.'iphone-18-pro-max.png',
