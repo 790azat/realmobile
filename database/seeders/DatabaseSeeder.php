@@ -128,7 +128,8 @@ class DatabaseSeeder extends Seeder
                 'description' => $desc,
                 'specs' => $specs + ['Гарантия' => '12 месяцев'],
                 'badge' => $badge,
-                'image' => "/img/{$slug}",
+                // Цветной рендер Apple легче (~150 КБ), чем общее фото модели (до 900 КБ).
+                'image' => $slug === 'iphone-17e' ? "/img/{$slug}" : "/img/{$slug}_".array_key_first($colors),
                 'sort' => $sort + 1,
                 'meta_title' => "Купить {$name} — цена, наличие | REALMOBILE",
                 'meta_description' => "{$name}: оригинал, все цвета и объёмы памяти. Цена от ".number_format(min($storages), 0, '', ' ')." ₽. Оставьте заявку или напишите в Telegram/WhatsApp.",
