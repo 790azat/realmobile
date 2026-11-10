@@ -33,7 +33,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <script type="application/ld+json">{!! json_encode([
-        '@context' => 'https://schema.org',
+        '@'.'context' => 'https://schema.org',
         '@type' => 'Store',
         'name' => $shop,
         'url' => url('/'),

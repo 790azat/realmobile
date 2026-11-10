@@ -58,6 +58,35 @@ class ImageController extends Controller
         return redirect()->away(end($sources));
     }
 
+    /** Диагностика: какой источник сработал для каждого фото. */
+    public function status()
+    {
+        $map = config('phone_images');
+        $urls = [];
+        foreach ($map as $key => $sources) {
+            foreach ($sources as $i => $url) {
+                $urls["{$key}#{$i}"] = $url;
+            }
+        }
+        // Контроль: заведомо несуществующее имя, чтобы убедиться, что CDN не отдаёт заглушку.
+        $urls['__bogus#0'] = 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-99-finish-select-209901-nonexistent?wid=1000&hei=1000&fmt=png-alpha';
+
+        $responses = Http::pool(fn ($pool) => collect($urls)->map(
+            fn ($url, $id) => $pool->as($id)->timeout(8)->withHeaders(['User-Agent' => 'Mozilla/5.0'])->get($url)
+        )->all());
+
+        $out = [];
+        foreach ($urls as $id => $url) {
+            [$key, $i] = explode('#', $id);
+            $r = $responses[$id] ?? null;
+            $ok = $r instanceof \Illuminate\Http\Client\Response && $r->successful()
+                && str_starts_with((string) $r->header('Content-Type'), 'image/') && strlen($r->body()) >= self::MIN_BYTES;
+            $out[$key][] = $ok ? 'ok:'.strlen($r->body()) : 'fail:'.($r instanceof \Illuminate\Http\Client\Response ? $r->status() : 'err');
+        }
+
+        return response()->json($out);
+    }
+
     private function respond(string $body, string $type)
     {
         return response($body, 200, [

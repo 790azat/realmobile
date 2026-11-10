@@ -12,6 +12,7 @@ Route::get('/iphone', Livewire\Catalog::class)->name('catalog');
 Route::get('/iphone/{slug}', Livewire\ProductPage::class)->name('product');
 Route::get('/accessories', [ShopController::class, 'accessories'])->name('accessories');
 Route::get('/accessories/{slug}', [ShopController::class, 'accessories'])->name('accessories.category');
+Route::get('/img-status', [ImageController::class, 'status']);
 Route::get('/img/{key}', [ImageController::class, 'show'])->where('key', '[a-z0-9_\-]+')->name('img');
 Route::get('/sitemap.xml', [ShopController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [ShopController::class, 'robots']);
