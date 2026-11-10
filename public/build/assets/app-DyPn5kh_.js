@@ -1,0 +1,1 @@
+window.copyText=async e=>{try{return await navigator.clipboard.writeText(e),!0}catch{return!1}};
